@@ -1,13 +1,17 @@
 package main
 
 import (
-	"fmt"
-	"runtime"
+	"os"
+	"sync"
+	"time"
 )
 
-var count = 1
+var gracefulStop = make(chan os.Signal, 1)
+var ticker = time.NewTicker(10 * time.Millisecond)
+var wg = sync.WaitGroup{}
 
 func main() {
-	fmt.Printf("Thread: %v\n", runtime.GOMAXPROCS(1000))
-	fmt.Printf("Thread: %v\n", runtime.GOMAXPROCS(-1))
+	wg.Add(1)
+	tickerFunc()
+	wg.Wait()
 }
