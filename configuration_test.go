@@ -34,3 +34,12 @@ func TestInitConfigShouldNotReturnError(t *testing.T) {
 	assert.Equal(t, "http://localhost:8080", config.Host)
 	assert.Equal(t, "test-service", config.Service)
 }
+
+func TestInitConfigShouldReturnError(t *testing.T) {
+	os.Setenv(authorizationEnvVariableName, "")
+	os.Setenv(serviceEnvVariableName, "")
+	os.Setenv(namespaceEnvVariableName, "")
+	os.Setenv(authorizationEnvVariableName, "")
+	_, err := initConfiguration()
+	assert.NotEqual(t, nil, err, "error should be nil")
+}
