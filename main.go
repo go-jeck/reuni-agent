@@ -1,17 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"os"
-	"sync"
-	"time"
 )
 
-var gracefulStop = make(chan os.Signal, 1)
-var ticker = time.NewTicker(10 * time.Millisecond)
-var wg = sync.WaitGroup{}
-
 func main() {
-	wg.Add(1)
-	tickerFunc()
-	wg.Wait()
+	fmt.Println("Hello World!!")
+	fmt.Println(os.Getenv("REUNI_HOST"))
+	fmt.Println(os.Getenv("REUNI_SERVICE"))
+	fmt.Println(os.Getenv("REUNI_NAMESPACE"))
+	fmt.Println(os.Getenv("REUNI_AUTHORIZATION"))
 }

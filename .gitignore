@@ -21,4 +21,5 @@ bin/
 tmp/
 vendor/
 keys
+container.env
 # End of https://www.gitignore.io/api/go

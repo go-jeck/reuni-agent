@@ -1,4 +1,4 @@
-APP_NAME := reuni-server
+APP_NAME := reuni-agent
 BIN := bin
 
 all:

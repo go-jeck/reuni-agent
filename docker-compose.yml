@@ -1,0 +1,9 @@
+version: '3'
+services:
+  reuni-agent:
+    build: .
+    volumes:
+      - .:/go/src/github.com/go-squads/reuni-agent
+    env_file: container.env
+      
+    
