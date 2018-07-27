@@ -17,5 +17,13 @@ func setEnv() {
 func TestGetFetchUrlMethod(t *testing.T) {
 	setEnv()
 	initContext()
-	assert.Equal(t, "http://127.0.0.1:8080/services/test-service/development/agent", getFetchVersionURL(agentConfig))
+	expectedUrl := "http://127.0.0.1:8080/services/test-service/development/agent"
+	assert.Equal(t, expectedUrl, getFetchVersionURL(agentConfig))
+}
+
+func TestGetConfigurationUrlMethod(t *testing.T) {
+	setEnv()
+	initContext()
+	expectedUrl := "http://127.0.0.1:8080/services/test-service/development/2/agent"
+	assert.Equal(t, expectedUrl, getFetchConfigurationURL(agentConfig, 2))
 }
