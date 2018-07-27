@@ -9,4 +9,7 @@ func initContext() {
 	if err != nil {
 		panic(err)
 	}
+	serviceConfig = &Configuration{
+		Version: 0,
+	}
 }

@@ -10,7 +10,7 @@ type Configuration struct {
 	Configuration map[string]interface{} `json:"configuration"`
 }
 
-func configurationSetter(configurationData Configuration) {
+func configurationSetter(configurationData *Configuration) {
 	for k, v := range configurationData.Configuration {
 		key := fmt.Sprintf("%v", k)
 		value := fmt.Sprintf("%v", v)

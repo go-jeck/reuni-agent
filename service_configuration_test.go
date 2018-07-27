@@ -15,7 +15,7 @@ func TestConfigurationEnvironmentSetter(t *testing.T) {
 		Version:       10,
 		Configuration: configuration,
 	}
-	configurationSetter(configData)
+	configurationSetter(&configData)
 	assert.Equal(t, "localhost", os.Getenv("DB_HOST"))
 	assert.Equal(t, "test123", os.Getenv("DB_PASS"))
 }
