@@ -42,7 +42,7 @@ func initConfiguration() (*ReuniAgentConfiguration, error) {
 	if isEmpty(config.Namespace) {
 		return nil, createConfigError(namespaceEnvVariableName)
 	}
-	config.Service = os.Getenv(authorizationEnvVariableName)
+	config.Authorization = os.Getenv(authorizationEnvVariableName)
 	if isEmpty(config.Service) {
 		return nil, createConfigError(authorizationEnvVariableName)
 	}
