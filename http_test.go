@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/http"
 	"os"
 	"testing"
 
@@ -43,4 +44,18 @@ func TestSendRequestShouldReturnError(t *testing.T) {
 	helper := HttpHelper{}
 	_, err := helper.SendRequest()
 	assert.NotEqual(t, nil, err)
+}
+
+func TestFetchData404NotFound(t *testing.T) {
+	resp := &http.Response{
+		StatusCode: 404,
+		Status:     "404 Not Found",
+	}
+	caller := &MockHTTPCaller{
+		Response: resp,
+	}
+	var data Configuration
+	err := fetchData(caller, &data)
+	assert.EqualError(t, err, "HTTP Error: 404 Not Found")
+	assert.Equal(t, 0, data.Version)
 }

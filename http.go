@@ -1,18 +1,28 @@
 package main
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 )
 
 type HttpCaller interface {
-	SendRequest() *http.Response
+	SendRequest() (*http.Response, error)
 }
 
 type HttpHelper struct {
 	URL           string
 	Method        string
 	Authorization string
+}
+
+type MockHTTPCaller struct {
+	Response *http.Response
+}
+
+func (h *MockHTTPCaller) SendRequest() (*http.Response, error) {
+	return h.Response, nil
 }
 
 func getFetchVersionURL(config *ReuniAgentConfiguration) string {
@@ -35,4 +45,21 @@ func (h *HttpHelper) SendRequest() (*http.Response, error) {
 		return nil, err
 	}
 	return resp, nil
+}
+
+func fetchData(caller HttpCaller, data interface{}) error {
+	resp, err := caller.SendRequest()
+	if err != nil {
+		return err
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return errors.New("HTTP Error: " + resp.Status)
+	}
+	err = json.NewDecoder(resp.Body).Decode(data)
+	resp.Body.Close()
+	if err != nil {
+		return err
+	}
+	return nil
 }
