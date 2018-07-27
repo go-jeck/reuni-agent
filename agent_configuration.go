@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"os"
+	"strconv"
 )
 
 type ReuniAgentConfiguration struct {
@@ -10,6 +11,7 @@ type ReuniAgentConfiguration struct {
 	Service       string `json:"service"`
 	Namespace     string `json:"namespace"`
 	Authorization string `json:"authorization"`
+	Interval      int    `json:"interval"`
 }
 
 const (
@@ -17,6 +19,7 @@ const (
 	serviceEnvVariableName       = "REUNI_SERVICE"
 	namespaceEnvVariableName     = "REUNI_NAMESPACE"
 	authorizationEnvVariableName = "REUNI_AUTHORIZATION"
+	intervalEnvVariableName      = "REUNI_INTERVAL"
 	configErrorMessage           = "Please set up Environment variable:"
 )
 
@@ -45,6 +48,16 @@ func initConfiguration() (*ReuniAgentConfiguration, error) {
 	config.Authorization = os.Getenv(authorizationEnvVariableName)
 	if isEmpty(config.Service) {
 		return nil, createConfigError(authorizationEnvVariableName)
+	}
+	getted := os.Getenv(intervalEnvVariableName)
+	if isEmpty(getted) {
+		config.Interval = 5
+	} else {
+		interval, err := strconv.Atoi(getted)
+		if err != nil {
+			return nil, createConfigError("Interval must be integer")
+		}
+		config.Interval = interval
 	}
 	return &config, nil
 }

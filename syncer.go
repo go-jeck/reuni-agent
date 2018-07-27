@@ -60,6 +60,6 @@ func handleSync() {
 func startLooper() {
 	for {
 		handleSync()
-		time.Sleep(5 * time.Second)
+		time.Sleep(time.Duration(agentConfig.Interval) * time.Second)
 	}
 }

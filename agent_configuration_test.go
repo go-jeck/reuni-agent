@@ -41,5 +41,42 @@ func TestInitConfigShouldReturnError(t *testing.T) {
 	os.Setenv(namespaceEnvVariableName, "")
 	os.Setenv(authorizationEnvVariableName, "")
 	_, err := initConfiguration()
-	assert.NotEqual(t, nil, err, "error should be nil")
+	assert.NotEqual(t, nil, err)
+}
+
+func TestInitConfigShouldReturnErrorWhenIntervalNotInteger(t *testing.T) {
+	os.Setenv(hostEnvVariableName, "http://localhost:8080")
+	os.Setenv(serviceEnvVariableName, "test-service")
+	os.Setenv(namespaceEnvVariableName, "development")
+	os.Setenv(authorizationEnvVariableName, "123456")
+	os.Setenv(intervalEnvVariableName, "asd")
+
+	_, err := initConfiguration()
+	assert.Error(t, err)
+
+}
+
+func TestInitConfigShouldNotReturnErrorWhenIntervalNotSet(t *testing.T) {
+	os.Setenv(hostEnvVariableName, "http://localhost:8080")
+	os.Setenv(serviceEnvVariableName, "test-service")
+	os.Setenv(namespaceEnvVariableName, "development")
+	os.Setenv(authorizationEnvVariableName, "123456")
+	os.Setenv(intervalEnvVariableName, "")
+
+	config, err := initConfiguration()
+	assert.NoError(t, err)
+	assert.Equal(t, config.Interval, 5)
+}
+
+func TestInitConfigShouldNotReturnErrorWhenIntervalSetted(t *testing.T) {
+	os.Setenv(hostEnvVariableName, "http://localhost:8080")
+	os.Setenv(serviceEnvVariableName, "test-service")
+	os.Setenv(namespaceEnvVariableName, "development")
+	os.Setenv(authorizationEnvVariableName, "123456")
+	os.Setenv(intervalEnvVariableName, "60")
+
+	config, err := initConfiguration()
+	assert.NoError(t, err)
+	assert.Equal(t, config.Interval, 60)
+
 }
