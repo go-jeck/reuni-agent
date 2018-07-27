@@ -21,4 +21,6 @@ func TestContextShouldNotPanic(t *testing.T) {
 	os.Setenv(namespaceEnvVariableName, "development")
 	os.Setenv(authorizationEnvVariableName, "authorizationToken")
 	assert.NotPanics(t, initContext, "initContext should panic when one environment variable not set")
+	assert.Equal(t, "development", agentConfig.Namespace)
+	assert.NotEqual(t, "test", agentConfig.Service)
 }
