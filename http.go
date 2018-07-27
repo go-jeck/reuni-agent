@@ -17,14 +17,6 @@ type HttpHelper struct {
 	Authorization string
 }
 
-type MockHTTPCaller struct {
-	Response *http.Response
-}
-
-func (h *MockHTTPCaller) SendRequest() (*http.Response, error) {
-	return h.Response, nil
-}
-
 func getFetchVersionURL(config *ReuniAgentConfiguration) string {
 	return fmt.Sprintf("%v/services/%v/%v/agent", config.Host, config.Service, config.Namespace)
 }
