@@ -22,7 +22,7 @@ func TestCreateConfigError(t *testing.T) {
 }
 
 func TestInitConfigShouldNotReturnError(t *testing.T) {
-	os.Setenv(authorizationEnvVariableName, "http://localhost:8080")
+	os.Setenv(hostEnvVariableName, "http://localhost:8080")
 	os.Setenv(serviceEnvVariableName, "test-service")
 	os.Setenv(namespaceEnvVariableName, "development")
 	os.Setenv(authorizationEnvVariableName, "123456")
@@ -36,7 +36,7 @@ func TestInitConfigShouldNotReturnError(t *testing.T) {
 }
 
 func TestInitConfigShouldReturnError(t *testing.T) {
-	os.Setenv(authorizationEnvVariableName, "")
+	os.Setenv(hostEnvVariableName, "")
 	os.Setenv(serviceEnvVariableName, "")
 	os.Setenv(namespaceEnvVariableName, "")
 	os.Setenv(authorizationEnvVariableName, "")

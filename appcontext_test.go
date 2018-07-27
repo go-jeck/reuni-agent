@@ -8,7 +8,7 @@ import (
 )
 
 func TestContextShouldPanic(t *testing.T) {
-	os.Setenv(authorizationEnvVariableName, "http://127.0.0.1:8080")
+	os.Setenv(hostEnvVariableName, "http://127.0.0.1:8080")
 	os.Setenv(serviceEnvVariableName, "test-service")
 	os.Setenv(namespaceEnvVariableName, "")
 	os.Setenv(authorizationEnvVariableName, "authorizationToken")
@@ -16,7 +16,7 @@ func TestContextShouldPanic(t *testing.T) {
 }
 
 func TestContextShouldNotPanic(t *testing.T) {
-	os.Setenv(authorizationEnvVariableName, "http://127.0.0.1:8080")
+	os.Setenv(hostEnvVariableName, "http://127.0.0.1:8080")
 	os.Setenv(serviceEnvVariableName, "test-service")
 	os.Setenv(namespaceEnvVariableName, "development")
 	os.Setenv(authorizationEnvVariableName, "authorizationToken")
