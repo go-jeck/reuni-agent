@@ -17,7 +17,10 @@ func initGracefulShutdown() {
 	go func() {
 		<-stopSignal
 		log.Println("Gracefully shutting down agent")
-
+		if start {
+			stopLooper <- true
+			stopChannel <- true
+		}
 		time.Sleep(1 * time.Second)
 		os.Exit(0)
 	}()
