@@ -47,7 +47,7 @@ func runnerStart(context *ReuniAgentConfiguration) {
 		log.Println("Starting program")
 		err := run(context.StartCommand)
 		if err != nil {
-			log.Println("Failed:", err.Error())
+			panic(err.Error())
 		}
 	}()
 	start = true
