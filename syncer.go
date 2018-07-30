@@ -52,6 +52,9 @@ func handleSync() {
 		log.Println("Set configuration to environment")
 		configurationSetter(configuration)
 		log.Println("Configuration setted to environment")
+		if start {
+			stopChannel <- true
+		}
 		go runnerStart(agentConfig)
 	} else {
 		log.Print("Configuration still up to date")

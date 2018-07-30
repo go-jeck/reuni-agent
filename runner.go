@@ -9,6 +9,7 @@ import (
 
 var wg sync.WaitGroup
 var stopChannel = make(chan bool)
+var start = false
 
 func run(startCommand string) error {
 
@@ -31,8 +32,14 @@ func run(startCommand string) error {
 		}
 	}()
 
-	return nil
+	go func() {
+		<-stopChannel
+		log.Println("Killing Process...")
+		cmd.Process.Kill()
+		log.Println("Killed...")
+	}()
 
+	return nil
 }
 
 func runnerStart(context *ReuniAgentConfiguration) {
@@ -43,6 +50,7 @@ func runnerStart(context *ReuniAgentConfiguration) {
 			log.Println("Failed:", err.Error())
 		}
 	}()
+	start = true
 }
 
 func runnerStop() {
