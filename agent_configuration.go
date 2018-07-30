@@ -12,6 +12,7 @@ type ReuniAgentConfiguration struct {
 	Namespace     string `json:"namespace"`
 	Authorization string `json:"authorization"`
 	Interval      int    `json:"interval"`
+	StartCommand  string `json:"start_command"`
 }
 
 const (
@@ -20,6 +21,7 @@ const (
 	namespaceEnvVariableName     = "REUNI_NAMESPACE"
 	authorizationEnvVariableName = "REUNI_AUTHORIZATION"
 	intervalEnvVariableName      = "REUNI_INTERVAL"
+	startCommandEnvVariableName  = "REUNI_START_COMMAND"
 	configErrorMessage           = "Please set up Environment variable:"
 )
 
@@ -46,6 +48,10 @@ func initConfiguration() (*ReuniAgentConfiguration, error) {
 		return nil, createConfigError(namespaceEnvVariableName)
 	}
 	config.Authorization = os.Getenv(authorizationEnvVariableName)
+	if isEmpty(config.Service) {
+		return nil, createConfigError(authorizationEnvVariableName)
+	}
+	config.StartCommand = os.Getenv(startCommandEnvVariableName)
 	if isEmpty(config.Service) {
 		return nil, createConfigError(authorizationEnvVariableName)
 	}
