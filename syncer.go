@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+var stopLooper chan bool
+
 func fetchVersion(config *ReuniAgentConfiguration) *Configuration {
 	helper := &HttpHelper{
 		URL:           getFetchVersionURL(config),
@@ -62,8 +64,18 @@ func handleSync() {
 }
 
 func startLooper() {
+	stopLooper = make(chan bool)
 	for {
+		endLoop := false
 		handleSync()
+		select {
+		case endLoop = <-stopLooper:
+			break
+		}
+		if endLoop {
+			log.Println("Stop Polling")
+			break
+		}
 		time.Sleep(time.Duration(agentConfig.Interval) * time.Second)
 	}
 }
