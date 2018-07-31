@@ -45,7 +45,10 @@ func run(startCommand string) error {
 func runnerStart(context *ReuniAgentConfiguration) {
 	go func() {
 		log.Println("Starting program")
-		go run(context.StartCommand)
+		err := run(context.StartCommand)
+		if err != nil {
+			panic(err)
+		}
 	}()
 	start = true
 }
