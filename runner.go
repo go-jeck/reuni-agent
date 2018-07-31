@@ -15,6 +15,10 @@ func run(startCommand string) error {
 
 	cmd := exec.Command(startCommand)
 
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
+		return err
+	}
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		return err
@@ -28,6 +32,14 @@ func run(startCommand string) error {
 	go func() {
 		for scanner.Scan() {
 			m := scanner.Text()
+			log.Println("app |", m)
+		}
+	}()
+
+	errScanner := bufio.NewScanner(stderr)
+	go func() {
+		for errScanner.Scan() {
+			m := errScanner.Text()
 			log.Println("app |", m)
 		}
 	}()
