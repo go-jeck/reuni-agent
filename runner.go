@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"log"
+	"os"
 	"os/exec"
 	"sync"
 )
@@ -11,9 +12,9 @@ var wg sync.WaitGroup
 var stopChannel = make(chan bool)
 var start = false
 
-func run(startCommand string) error {
+func run(startCommand string, arg string) error {
 
-	cmd := exec.Command(startCommand)
+	cmd := exec.Command(startCommand, arg)
 
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
@@ -57,7 +58,7 @@ func run(startCommand string) error {
 func runnerStart(context *ReuniAgentConfiguration) {
 	go func() {
 		log.Println("Starting program")
-		err := run(context.StartCommand)
+		err := run(context.StartCommand, os.Getenv("REUNI_ARGS"))
 		if err != nil {
 			panic(err)
 		}
