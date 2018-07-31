@@ -66,16 +66,13 @@ func handleSync() {
 func startLooper() {
 	stopLooper = make(chan bool)
 	for {
-		endLoop := false
 		handleSync()
 		select {
-		case endLoop = <-stopLooper:
+		case _ = <-stopLooper:
+			log.Println("Stopping Looper")
 			break
+		default:
+			time.Sleep(time.Duration(agentConfig.Interval) * time.Second)
 		}
-		if endLoop {
-			log.Println("Stop Polling")
-			break
-		}
-		time.Sleep(time.Duration(agentConfig.Interval) * time.Second)
 	}
 }
