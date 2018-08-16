@@ -12,4 +12,4 @@ ADD . /go/src/github.com/go-squads/reuni-agent
 WORKDIR /go/src/github.com/go-squads/reuni-agent
 
 # serve the app
-CMD dep ensure && go test -v ./... && go build -o bin/main && bin/main
+CMD dep ensure && go build -o bin/main && bin/main

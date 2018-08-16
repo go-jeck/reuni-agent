@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
-	"time"
+	"strconv"
+
+	"github.com/go-redis/redis"
 )
 
 var stopLooper chan bool
@@ -46,33 +49,65 @@ func isNeedUpdate(current, expected int) bool {
 	return current != expected
 }
 
-func handleSync() {
-	version := fetchVersion(agentConfig)
-	if isNeedUpdate(serviceConfig.Version, version.Version) {
-		log.Print("Configuration need to be updated")
-		configuration := fetchConfiguration(agentConfig, version.Version)
-		log.Println("Set configuration to environment")
-		configurationSetter(configuration)
-		log.Println("Configuration setted to environment")
-		if start {
-			stopChannel <- true
-		}
-		go runnerStart(agentConfig)
-	} else {
-		log.Print("Configuration still up to date")
+func handleSync(pubSubClient *redis.PubSub) {
+	// Wait for confirmation that subscription is created before publishing anything.
+	_, err := pubSubClient.Receive()
+	if err != nil {
+		panic(err)
 	}
+
+	// Go channel which receives messages.
+	ch := pubSubClient.Channel()
+
+	getLatestConfig(fetchVersion(agentConfig).Version)
+
+	// go func() {
+	for {
+		msg, ok := <-ch
+
+		if !ok {
+			break
+		}
+		fmt.Println(msg.Channel, msg.Payload)
+		log.Print("Configuration need to be updated")
+		version, err := strconv.Atoi(msg.Payload)
+		if err != nil {
+			log.Println("ERROR PARSING VERSION")
+		} else {
+			getLatestConfig(version)
+		}
+	}
+	// }()
+
 }
 
-func startLooper() {
-	stopLooper = make(chan bool)
-	for {
-		handleSync()
-		select {
-		case _ = <-stopLooper:
-			log.Println("Stopping Looper")
-			break
-		default:
-			time.Sleep(time.Duration(agentConfig.Interval) * time.Second)
-		}
+func getLatestConfig(version int) {
+	// version := fetchVersion(agentConfig)
+	// if isNeedUpdate(serviceConfig.Version, version.Version) {
+	log.Print("Configuration need to be updated")
+	configuration := fetchConfiguration(agentConfig, version)
+	log.Println("Set configuration to environment")
+	configurationSetter(configuration)
+	log.Println("Configuration setted to environment")
+	if start {
+		stopChannel <- true
 	}
+	go runnerStart(agentConfig)
+	// } else {
+	// 	log.Print("Configuration still up to date")
+	// }
 }
+
+// func startLooper(pubSubClient *redis.PubSub) {
+// 	stopLooper = make(chan bool)
+// 	for {
+// 		handleSync(pubSubClient)
+// 		select {
+// 		case _ = <-stopLooper:
+// 			log.Println("Stopping Looper")
+// 			break
+// 		default:
+// 			time.Sleep(time.Duration(agentConfig.Interval) * time.Second)
+// 		}
+// 	}
+// }
