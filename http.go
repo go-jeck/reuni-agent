@@ -18,11 +18,11 @@ type HttpHelper struct {
 }
 
 func getFetchVersionURL(config *ReuniAgentConfiguration) string {
-	return fmt.Sprintf("%v/services/%v/%v/agent", config.Host, config.Service, config.Namespace)
+	return fmt.Sprintf("%v/%v/%v/%v/agent", config.Host, config.Organization, config.Service, config.Namespace)
 }
 
 func getFetchConfigurationURL(config *ReuniAgentConfiguration, version int) string {
-	return fmt.Sprintf("%v/services/%v/%v/%v/agent", config.Host, config.Service, config.Namespace, version)
+	return fmt.Sprintf("%v/%v/%v/%v/%v/agent", config.Host, config.Organization, config.Service, config.Namespace, version)
 }
 
 func (h *HttpHelper) SendRequest() (*http.Response, error) {

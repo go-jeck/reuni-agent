@@ -17,7 +17,7 @@ func main() {
 
 	pong, err := redisClient.Ping().Result()
 	fmt.Println(pong, err)
-	pubSub := redisClient.Subscribe(os.Getenv("REUNI_SERVICE") + "_" + os.Getenv("REUNI_NAMESPACE"))
+	pubSub := redisClient.Subscribe(os.Getenv("REUNI_ORGANIZATION") + "_" + os.Getenv("REUNI_SERVICE") + "_" + os.Getenv("REUNI_NAMESPACE"))
 
 	initContext()
 	initGracefulShutdown()

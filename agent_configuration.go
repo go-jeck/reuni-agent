@@ -8,6 +8,7 @@ import (
 
 type ReuniAgentConfiguration struct {
 	Host          string `json:"host"`
+	Organization  string `json:"organization"`
 	Service       string `json:"service"`
 	Namespace     string `json:"namespace"`
 	Authorization string `json:"authorization"`
@@ -17,6 +18,7 @@ type ReuniAgentConfiguration struct {
 
 const (
 	hostEnvVariableName          = "REUNI_HOST"
+	organizationEnvVariableName  = "REUNI_ORGANIZATION"
 	serviceEnvVariableName       = "REUNI_SERVICE"
 	namespaceEnvVariableName     = "REUNI_NAMESPACE"
 	authorizationEnvVariableName = "REUNI_AUTHORIZATION"
@@ -38,6 +40,10 @@ func initConfiguration() (*ReuniAgentConfiguration, error) {
 	config.Host = os.Getenv(hostEnvVariableName)
 	if isEmpty(config.Host) {
 		return nil, createConfigError(hostEnvVariableName)
+	}
+	config.Organization = os.Getenv(organizationEnvVariableName)
+	if isEmpty(config.Organization) {
+		return nil, createConfigError(organizationEnvVariableName)
 	}
 	config.Service = os.Getenv(serviceEnvVariableName)
 	if isEmpty(config.Service) {
